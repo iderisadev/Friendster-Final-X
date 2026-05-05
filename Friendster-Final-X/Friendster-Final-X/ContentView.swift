@@ -11,8 +11,14 @@ import MapKit
 struct ContentView: View {
    
     var body: some View {
-        VStack{
-            
+        TabView {
+            Tab("Home", systemImage:"house"){
+                Home()
+            }
+            Tab("Public Map", systemImage:"globe.americas"){
+                PublicMap()
+            }
+
         }
             
 

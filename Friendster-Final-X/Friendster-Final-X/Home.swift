@@ -5,3 +5,23 @@
 //  Created by Mobile on 5/5/26.
 //
 
+//
+//  ContentView.swift
+//  TestFinalProject
+//
+//  Created by Mobile on 5/1/26.
+//
+
+import SwiftUI
+import MapKit
+
+struct Home: View {
+    var body: some View {
+        Text("Friendster")
+    }
+}
+
+
+#Preview {
+    Home()
+}
