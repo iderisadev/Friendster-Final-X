@@ -35,16 +35,6 @@
 			path = "Friendster-Final-X";
 			sourceTree = "<group>";
 		};
-		754E8CA22FAA609A001D0D46 /* Friendster-Final-XTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Friendster-Final-XTests";
-			sourceTree = "<group>";
-		};
-		754E8CAC2FAA609A001D0D46 /* Friendster-Final-XUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Friendster-Final-XUITests";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				754E8C942FAA6099001D0D46 /* Friendster-Final-X */,
-				754E8CA22FAA609A001D0D46 /* Friendster-Final-XTests */,
-				754E8CAC2FAA609A001D0D46 /* Friendster-Final-XUITests */,
 				754E8C932FAA6099001D0D46 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +118,6 @@
 			dependencies = (
 				754E8CA12FAA609A001D0D46 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				754E8CA22FAA609A001D0D46 /* Friendster-Final-XTests */,
-			);
 			name = "Friendster-Final-XTests";
 			packageProductDependencies = (
 			);
@@ -152,9 +137,6 @@
 			);
 			dependencies = (
 				754E8CAB2FAA609A001D0D46 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				754E8CAC2FAA609A001D0D46 /* Friendster-Final-XUITests */,
 			);
 			name = "Friendster-Final-XUITests";
 			packageProductDependencies = (

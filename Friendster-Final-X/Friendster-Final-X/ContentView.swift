@@ -1,21 +1,21 @@
 //
 //  ContentView.swift
-//  Friendster-Final-X
+//  TestFinalProject
 //
-//  Created by Mobile on 5/5/26.
+//  Created by Mobile on 5/1/26.
 //
 
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
+   
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        VStack{
+            
         }
-        .padding()
+            
+
     }
 }
 
