@@ -16,7 +16,7 @@ struct PublicMap: View {
         )
     )
     @ObservedObject private var store = PinStore.shared
-
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             MapReader { proxy in
@@ -33,7 +33,7 @@ struct PublicMap: View {
                             case .second(true, let drag):
                                 if let location = drag?.location,
                                    let coord = proxy.convert(location, from: .local) {
-                                    store.addPin(coordinate: coord)
+                                    store.addPin(coordinate: coord, username: User.shared.username)
                                 }
                             default:
                                 break
@@ -42,7 +42,7 @@ struct PublicMap: View {
                 )
                 .ignoresSafeArea()
             }
-
+            
             VStack(spacing: 12) {
                 HStack(spacing: 16) {
                     Button("Santa Barbara") {
@@ -52,13 +52,12 @@ struct PublicMap: View {
                         ))
                     }
                     .buttonStyle(.borderedProminent)
-
-                    if !store.pins.isEmpty {
-                        Button("Clear Pins") {
-                            store.removeAll()
-                        }
-                        .buttonStyle(.bordered)
-                        .tint(.red)
+                    
+                    if !store.pins.isEmpty && store.pins.contains(where: { $0.username == User.shared.username }) {                        Button("Clear Pins") {
+                        store.removeAll()
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.red)
                     }
                 }
                 .padding(.bottom, 30)

@@ -14,20 +14,24 @@ class Pin: Identifiable {
     var coordinate: CLLocationCoordinate2D
     var title: String
     var subtitle: String
-    let createdAt: Date
-
+    var username: String
+    
+    static var currentUsername: String {
+        PinStore.shared.pins.first?.username ?? ""
+    }
+    
     init(
         id: UUID = UUID(),
         coordinate: CLLocationCoordinate2D,
         title: String = "New Pin",
         subtitle: String = "",
-        createdAt: Date = Date()
+        username: String = ""
     ) {
         self.id = id
         self.coordinate = coordinate
         self.title = title
         self.subtitle = subtitle
-        self.createdAt = createdAt
+        self.username = username
     }
 }
 
@@ -37,15 +41,14 @@ class PinStore: ObservableObject {
     @Published var pins: [Pin] = []
 
     private init() {
-            pins = [
-                Pin(coordinate: CLLocationCoordinate2D(latitude: 34.4208, longitude: -119.6982), title: "Harvey Lynching", subtitle: "Downtown SB"),
-                Pin(coordinate: CLLocationCoordinate2D(latitude: 34.4140, longitude: -119.8489), title: "Lecture", subtitle: "University of California"),
+        pins = [
+            Pin(coordinate: CLLocationCoordinate2D(latitude: 34.4208, longitude: -119.6982), title: "Harvey Lynching", subtitle: "We are killing Harvey", username: "Joseph Tinkerbell"),
+            Pin(coordinate: CLLocationCoordinate2D(latitude: 34.4140, longitude: -119.8489), title: "Lecture", subtitle: "Random lecture at UCSB at whatever time", username: "Joseph Tinkerbell"),
+        ]
+    }
 
-            ]
-        }
-
-    func addPin(coordinate: CLLocationCoordinate2D, title: String = "New Pin", subtitle: String = "") {
-        let pin = Pin(coordinate: coordinate, title: title, subtitle: subtitle)
+    func addPin(coordinate: CLLocationCoordinate2D, title: String = "New Pin", subtitle: String = "", username: String = "") {
+        let pin = Pin(coordinate: coordinate, title: title, subtitle: subtitle, username: username)
         pins.append(pin)
     }
 
