@@ -17,7 +17,13 @@ import MapKit
 
 struct Home: View {
     var body: some View {
-        Text("Friendster")
+        if User.loggedIn==true{
+            Text("Friendster")
+            Text("Hello, " + String(User.shared.username))
+        }
+        else{
+                Text("Login")
+        }
     }
 }
 

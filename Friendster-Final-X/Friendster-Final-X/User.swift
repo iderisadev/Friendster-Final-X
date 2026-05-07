@@ -9,7 +9,7 @@ import Foundation
 import Combine
 class User: ObservableObject {
     static let shared = User()
-    
+    static var loggedIn = true
     var username: String = "Ider"
     var password: String = "1234"
     
