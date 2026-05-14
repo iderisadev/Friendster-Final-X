@@ -18,6 +18,9 @@ struct ContentView: View {
             Tab("Public Map", systemImage:"globe.americas"){
                 PublicMap()
             }
+            Tab("Community", systemImage:"message"){
+                Community()
+            }
 
         }
             

@@ -1,32 +1,42 @@
-//
-//  Home.swift
-//  Friendster-Final-X
-//
-//  Created by Mobile on 5/5/26.
-//
-
-//
-//  ContentView.swift
-//  TestFinalProject
-//
-//  Created by Mobile on 5/1/26.
-//
-
 import SwiftUI
 import MapKit
 
 struct Home: View {
+    @ObservedObject private var user = User.shared
+    @ObservedObject private var store = PinStore.shared
+    
+    var myEvents: [Pin] {
+        store.pins.filter { $0.attendees.contains(User.shared.username) }
+    }
+
     var body: some View {
-        if User.loggedIn==true{
-            Text("Friendster")
-            Text("Hello, " + String(User.shared.username))
-        }
-        else{
-                Text("Login")
+        if User.loggedIn == true {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Friendster")
+                        .font(.largeTitle).bold()
+                    Text("Hello, \(User.shared.username)")
+                        .font(.subheadline)
+
+                    ForEach(myEvents) { pin in
+                        VStack(alignment: .leading) {
+                            Text(pin.title)
+                                .font(.headline)
+                            Text(pin.date, style: .date)
+                                .font(.subheadline)
+                        }
+                    }
+                }
+                .padding()
+            }
+            .refreshable {
+                store.refresh()
+            }
+        } else {
+            Text("Login")
         }
     }
 }
-
 
 #Preview {
     Home()

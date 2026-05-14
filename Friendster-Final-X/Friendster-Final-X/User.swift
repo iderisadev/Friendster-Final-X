@@ -10,8 +10,9 @@ import Combine
 class User: ObservableObject {
     static let shared = User()
     static var loggedIn = true
-    var username: String = "Ider"
+    var username: String = "ider"
     var password: String = "1234"
+    
     
     private init() {}
 }

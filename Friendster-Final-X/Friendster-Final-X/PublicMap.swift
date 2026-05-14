@@ -20,6 +20,9 @@ struct PublicMap: View {
     @State private var showForm = false
     @State private var newTitle = ""
     @State private var newSubtitle = ""
+    @State private var selectedPin: Pin? = nil
+    @State private var newDate = Date()
+    @State private var refresh = false
 
     var body: some View {
         NavigationStack {
@@ -27,7 +30,20 @@ struct PublicMap: View {
                 MapReader { proxy in
                     Map(position: $position) {
                         ForEach(store.pins) { pin in
-                            Marker(pin.title, coordinate: pin.coordinate)
+                            Annotation("", coordinate: pin.coordinate) {
+                                Button {
+                                    selectedPin = pin
+                                } label: {
+                                    ZStack {
+                                        Circle()
+                                            .fill(.red)
+                                            .frame(width: 32, height: 32)
+                                        Image(systemName: "mappin")
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 16, weight: .bold))
+                                    }
+                                }
+                            }
                         }
                     }
                     .simultaneousGesture(
@@ -39,7 +55,7 @@ struct PublicMap: View {
                                 case .second(true, let drag):
                                     if let location = drag?.location,
                                        let coord = proxy.convert(location, from: .local) {
-                                        store.addPin(coordinate: coord, title: newTitle.isEmpty ? "New Pin" : newTitle, subtitle: newSubtitle, username: User.shared.username)
+                                        store.addPin(coordinate: coord, title: newTitle.isEmpty ? "New Pin" : newTitle, subtitle: newSubtitle, username: User.shared.username, Date1: newDate)
                                         isAddingPin = false
                                         newTitle = ""
                                         newSubtitle = ""
@@ -70,6 +86,8 @@ struct PublicMap: View {
                         }
                         .buttonStyle(.borderedProminent)
 
+                       
+
                         if !store.pins.isEmpty && store.pins.contains(where: { $0.username == User.shared.username }) {
                             Button("Clear Pins") {
                                 store.removeAll()
@@ -96,6 +114,7 @@ struct PublicMap: View {
                         Section("Pin Details") {
                             TextField("Title", text: $newTitle)
                             TextField("Subtitle", text: $newSubtitle)
+                            DatePicker("Date", selection: $newDate, displayedComponents: [.date, .hourAndMinute])
                         }
                     }
                     .navigationTitle("New Pin")
@@ -116,6 +135,41 @@ struct PublicMap: View {
                                 }
                             }
                             .disabled(newTitle.isEmpty)
+                        }
+                    }
+                }
+                .presentationDetents([.fraction(0.35)])
+            }
+            .sheet(item: $selectedPin) { pin in
+                NavigationStack {
+                    Form {
+                        Section("Pin Info") {
+                            LabeledContent("Title", value: pin.title)
+                            LabeledContent("Date", value: pin.date.formatted(date: .abbreviated, time: .shortened))
+                            LabeledContent("Information", value: pin.subtitle)
+                            LabeledContent("Posted By", value: pin.username)
+                            LabeledContent("Attending", value: pin.attendees.isEmpty ? "None" : pin.attendees.joined(separator: ", "))
+                        }
+                        Section {
+                            Button(pin.attendees.contains(User.shared.username) ? "Leave Event" : "Join Event") {
+                                if pin.attendees.contains(User.shared.username) {
+                                    pin.attendees.removeAll { $0 == User.shared.username }
+                                } else {
+                                    pin.attendees.append(User.shared.username)
+                                }
+                                refresh.toggle()
+                            }
+                            .foregroundStyle(pin.attendees.contains(User.shared.username) ? .red : .blue)
+                        }
+                    }
+                    .id(refresh)
+                    .navigationTitle(pin.title)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") {
+                                selectedPin = nil
+                            }
                         }
                     }
                 }
