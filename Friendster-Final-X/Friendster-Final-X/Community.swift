@@ -17,7 +17,7 @@ import MapKit
 
 struct Community: View {
     var body: some View {
-        if User.loggedIn==true{
+        if User.shared.loggedIn==true{
             Text("Friendster")
             Text("Hello, " + String(User.shared.username))
         }
