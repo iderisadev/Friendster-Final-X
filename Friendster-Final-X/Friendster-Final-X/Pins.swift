@@ -77,7 +77,7 @@ class PinStore: ObservableObject {
     }
     
     func addPin(coordinate: CLLocationCoordinate2D, title: String = "New Pin", subtitle: String = "", username: String = "", Date1: Date) {
-        let pin = Pin(coordinate: coordinate, title: title, subtitle: subtitle, username: username, date: Date1, attendees: [])
+        let pin = Pin(coordinate: coordinate, title: title, subtitle: subtitle, username: username, date: Date1, attendees: [username])
         pins.append(pin)
     }
     

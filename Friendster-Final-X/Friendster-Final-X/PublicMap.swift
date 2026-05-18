@@ -23,7 +23,7 @@ struct PublicMap: View {
     @State private var selectedPin: Pin? = nil
     @State private var newDate = Date()
     @State private var refresh = false
-
+    
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -36,8 +36,11 @@ struct PublicMap: View {
                                 } label: {
                                     ZStack {
                                         Circle()
-                                            .fill(.red)
-                                            .frame(width: 32, height: 32)
+                                            .fill(pin.attendees.contains(User.shared.username) ? .purple : .red)
+                                            .frame(
+                                                width: pin.attendees.contains(User.shared.username) ? 35 : 30,
+                                                height: pin.attendees.contains(User.shared.username) ? 35 : 30
+                                            )
                                         Image(systemName: "mappin")
                                             .foregroundStyle(.white)
                                             .font(.system(size: 16, weight: .bold))
@@ -67,7 +70,7 @@ struct PublicMap: View {
                     )
                     .ignoresSafeArea()
                 }
-
+                
                 if isAddingPin {
                     Text("Hold on the map to place your pin")
                         .padding()
@@ -75,26 +78,16 @@ struct PublicMap: View {
                         .cornerRadius(10)
                         .padding(.bottom, 60)
                 }
-
+                
                 VStack(spacing: 12) {
                     HStack(spacing: 16) {
-                        Button("Santa Barbara") {
+                        Button("") {
                             position = .region(MKCoordinateRegion(
                                 center: CLLocationCoordinate2D(latitude: 34.4208, longitude: -119.6982),
                                 span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
                             ))
                         }
                         .buttonStyle(.borderedProminent)
-
-                       
-
-                        if !store.pins.isEmpty && store.pins.contains(where: { $0.username == User.shared.username }) {
-                            Button("Clear Pins") {
-                                store.removeAll()
-                            }
-                            .buttonStyle(.bordered)
-                            .tint(.red)
-                        }
                     }
                     .padding(.bottom, 30)
                 }
@@ -151,15 +144,23 @@ struct PublicMap: View {
                             LabeledContent("Attending", value: pin.attendees.isEmpty ? "None" : pin.attendees.joined(separator: ", "))
                         }
                         Section {
-                            Button(pin.attendees.contains(User.shared.username) ? "Leave Event" : "Join Event") {
-                                if pin.attendees.contains(User.shared.username) {
-                                    pin.attendees.removeAll { $0 == User.shared.username }
-                                } else {
-                                    pin.attendees.append(User.shared.username)
+                            if pin.username == User.shared.username {
+                                Button("Delete Event") {
+                                    store.pins.removeAll { $0.id == pin.id }
+                                    selectedPin = nil
                                 }
-                                refresh.toggle()
+                                .foregroundStyle(.red)
+                            } else {
+                                Button(pin.attendees.contains(User.shared.username) ? "Leave Event" : "Join Event") {
+                                    if pin.attendees.contains(User.shared.username) {
+                                        pin.attendees.removeAll { $0 == User.shared.username }
+                                    } else {
+                                        pin.attendees.append(User.shared.username)
+                                    }
+                                    refresh.toggle()
+                                }
+                                .foregroundStyle(pin.attendees.contains(User.shared.username) ? .red : .blue)
                             }
-                            .foregroundStyle(pin.attendees.contains(User.shared.username) ? .red : .blue)
                         }
                     }
                     .id(refresh)
